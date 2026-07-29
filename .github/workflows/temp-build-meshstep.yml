@@ -1,0 +1,26 @@
+name: Temporary Build MeshStep Dependency
+
+on:
+  pull_request:
+    branches: [master]
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.18.0'
+          registry-url: 'https://registry.npmjs.org'
+      - name: Download package
+        run: npm pack meshstep@0.1.1 --registry=https://registry.npmjs.org
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: meshstep-package
+          path: meshstep-0.1.1.tgz
+          if-no-files-found: error
+          retention-days: 1
