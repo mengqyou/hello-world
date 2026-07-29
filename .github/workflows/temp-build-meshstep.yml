@@ -1,4 +1,4 @@
-name: Temporary Build MeshStep Dependency
+name: Temporary Build CAD Dependencies
 
 on:
   pull_request:
@@ -15,12 +15,16 @@ jobs:
         with:
           node-version: '22.18.0'
           registry-url: 'https://registry.npmjs.org'
-      - name: Download package
-        run: npm pack meshstep@0.1.1 --registry=https://registry.npmjs.org
-      - name: Upload package artifact
+      - name: Download packages
+        run: |
+          npm pack meshstep@0.1.1 --registry=https://registry.npmjs.org
+          npm pack occt-import-js@0.0.23 --registry=https://registry.npmjs.org
+      - name: Upload package artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: meshstep-package
-          path: meshstep-0.1.1.tgz
+          name: cad-packages
+          path: |
+            meshstep-0.1.1.tgz
+            occt-import-js-0.0.23.tgz
           if-no-files-found: error
           retention-days: 1
